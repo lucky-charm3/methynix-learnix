@@ -1,0 +1,9 @@
+
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+body {
+  font-size:clamp(1rem,2.5vw+1rem,1rem,2.5rem);
+  @apply font-apple bg-dark text-neon;
+}
