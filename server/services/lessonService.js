@@ -3,18 +3,29 @@ const courseRepository=require('../repositories/courseRepository');
 const AppError=require('../utils/appError');
 
 const lessonService={
-    async addLesson(lesson,currentUser){
-        const course=await courseRepository.findById(lesson.courseId);
-        if(!course)
-        {
-            throw new AppError('Course not found',404);
+    async addLesson(lesson, currentUser) {
+        let course = null;
+        if (courseRepository.findById) {
+            course = await courseRepository.findById(lesson.courseId);
+        } else {
+            course = await Course.findById(lesson.courseId);
         }
 
-        if(currentUser.role!=='admin'&&course.teacherId.toString()!==currentUser._id)
-        {
-            throw new AppError('Not authorized to add lessons to this fucking course',403)
+        if (!course) {
+            throw new AppError('Course not found', 404);
         }
-        return await lessonRepository.addLesson(lesson)
+
+        const teacherId = course.teacherId._id 
+            ? course.teacherId._id.toString() 
+            : course.teacherId.toString();  
+
+        const currentUserId = currentUser._id.toString();
+
+        if (currentUser.role !== 'admin' && teacherId !== currentUserId) {
+            throw new AppError('Not authorized to add lessons to this course', 403);
+        }
+
+        return await lessonRepository.addLesson(lesson);
     },
 
     async getLessons(courseId,search,page,limit){

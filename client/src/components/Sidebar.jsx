@@ -33,7 +33,7 @@ const Sidebar = () => {
     <aside className="w-64 h-screen bg-grayDark border-r border-grayLight flex flex-col fixed left-0 top-0 z-50">
       <div className="p-6 border-b border-grayLight/50">
         <h1 className="text-2xl font-bold tracking-wider text-white">
-          LEA<span className="text-neon">.DEV</span>
+          METHYNIX<span className="text-neon">.LEARN</span>
         </h1>
       </div>
       

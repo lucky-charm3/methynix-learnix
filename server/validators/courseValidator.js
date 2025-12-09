@@ -1,19 +1,33 @@
-const Joi=require('joi');
+const Joi = require('joi');
 
-const createCourseSchema=Joi.object({
-title:Joi.string().min(5).max(100).required,
-description:Joi.string().min(20).required(),
-price:Joi.number().min(0).default(0),
-estimatedPrice:Joi.number().min(0).allow(null),
-isPublished:Joi.boolean().default(false),
-benefits:Joi.array().items(Joi.string()).min(1),
-thumbnail:Joi.object({
-    public_id:Joi.string(),
-    url:Joi.string()
-}).optional()
+const createCourseSchema = Joi.object({
+    title: Joi.string().required().min(3).trim(),
+    description: Joi.string().required().min(10),
+    
+    price: Joi.number().min(0).default(0), 
+    estimatedPrice: Joi.number().min(0).allow(null, ''),
+    
+    benefits: Joi.alternatives().try(
+        Joi.array().items(Joi.string()),
+        Joi.string()
+    ),
+    
+    isPublished: Joi.boolean(), 
+    
+    thumbnail: Joi.any().optional() 
 });
 
-const updateCourseSchema=createCourseSchema.fork(
-    ['title','description','price'],(schema)=>schema.optional()
-)
-module.exports={createCourseSchema,updateCourseSchema};
+const updateCourseSchema = Joi.object({
+    title: Joi.string().min(3).trim(),
+    description: Joi.string().min(10),
+    price: Joi.number().min(0),
+    estimatedPrice: Joi.number().min(0).allow(null, ''),
+    benefits: Joi.alternatives().try(
+        Joi.array().items(Joi.string()),
+        Joi.string()
+    ),
+    isPublished: Joi.boolean(),
+    thumbnail: Joi.any().optional()
+});
+
+module.exports = { createCourseSchema, updateCourseSchema };
